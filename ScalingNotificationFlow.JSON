@@ -1,0 +1,730 @@
+{
+  "description": "A New Flow",
+  "states": [
+    {
+      "type": "InitialState",
+      "name": "Trigger",
+      "properties": {
+        "offset": {
+          "x": 240,
+          "y": -30
+        },
+        "flow_url": "https://webhooks.twilio.com/v1/Accounts/ACa7aebb74e750ce7126fc979863a0b7d7/Flows/FWb7bcfc38692ba08e755048d3930ecd84"
+      },
+      "transitions": [
+        {
+          "event": "incomingMessage",
+          "conditions": [],
+          "next": null,
+          "uuid": "a4db5267-e297-4bba-a66f-a17bd6990236"
+        },
+        {
+          "event": "incomingCall",
+          "conditions": [],
+          "next": null,
+          "uuid": "db7f866d-b347-4408-8107-aca1f12d65ff"
+        },
+        {
+          "event": "incomingRequest",
+          "conditions": [],
+          "next": "FFd2a7b003731f12f1363cd495e35921ad",
+          "uuid": "33eb2c90-f7d1-4b6e-aced-f3f7b5fb9726"
+        }
+      ],
+      "sid": "FF93d93742578ffad2cd4ac6f226ed9150"
+    },
+    {
+      "type": "MessagePrompt",
+      "name": "Initial_Notification",
+      "properties": {
+        "offset": {
+          "x": 450,
+          "y": 180
+        },
+        "body": "Request from: {{flow.data.CustomerName}}\nOrder Details: {{flow.data.OrderInfo}} \nWait time: {{flow.data.WaitTime}}\nReply with \"Accept\" or \"Decline\"",
+        "from": "{{flow.channel.address}}",
+        "timeout": 15,
+        "save_response_as": null,
+        "media_url": null,
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "attributes": null
+      },
+      "transitions": [
+        {
+          "event": "incomingMessage",
+          "conditions": [],
+          "next": "FF4ea9c696db08cde0548da853cc560545",
+          "uuid": "34ef8a36-3f9a-4ab9-a3bf-ca5bcdd584d3"
+        },
+        {
+          "event": "timeout",
+          "conditions": [],
+          "next": "FF6042eb8e2423cb35259219c0403abc8b",
+          "uuid": "cc371058-a8e8-4cf3-9b77-e95c938e857c"
+        },
+        {
+          "event": "deliveryFailure",
+          "conditions": [],
+          "next": "FFd2a7b003731f12f1363cd495e35921ad",
+          "uuid": "1a8a54f7-fc21-4329-ac13-f68fb0bfd30c"
+        }
+      ],
+      "sid": "FFd2a7b003731f12f1363cd495e35921ad"
+    },
+    {
+      "type": "Branch",
+      "name": "AcceptDecline",
+      "properties": {
+        "offset": {
+          "x": -610,
+          "y": 440
+        },
+        "input": "{{widgets.Initial_Notification.inbound.Body}}"
+      },
+      "transitions": [
+        {
+          "event": "noMatch",
+          "conditions": [],
+          "next": "FFec580e3ef75c97d9e421e894d3d93567",
+          "uuid": "86239b49-fb43-4984-8151-ce0f62479d2a"
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value contains Accept",
+              "type": "contains",
+              "arguments": [
+                "{{widgets.Initial_Notification.inbound.Body}}"
+              ],
+              "value": "Accept"
+            }
+          ],
+          "next": "FF611a54e3bb307089c5c3d3226c185cf8",
+          "uuid": "5c0770d6-30ed-4c84-9383-14e0d9b83642"
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value contains ACCEPT",
+              "type": "contains",
+              "arguments": [
+                "{{widgets.Initial_Notification.inbound.Body}}"
+              ],
+              "value": "ACCEPT"
+            }
+          ],
+          "next": "FF611a54e3bb307089c5c3d3226c185cf8",
+          "uuid": "8a574a81-943f-41d3-beaa-639f7185919b"
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to accept",
+              "type": "contains",
+              "arguments": [
+                "{{widgets.Initial_Notification.inbound.Body}}"
+              ],
+              "value": "accept"
+            }
+          ],
+          "next": "FF611a54e3bb307089c5c3d3226c185cf8",
+          "uuid": "32ac7278-89ed-4687-a6eb-7b5f19b43979"
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value contains Decline",
+              "type": "contains",
+              "arguments": [
+                "{{widgets.Initial_Notification.inbound.Body}}"
+              ],
+              "value": "Decline"
+            }
+          ],
+          "next": "FFf20e4187164c0397219f12bb8dd384e2",
+          "uuid": "1626af3b-c771-4dac-a915-25200aa46dd9"
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to decline",
+              "type": "equal_to",
+              "arguments": [
+                "{{widgets.Initial_Notification.inbound.Body}}"
+              ],
+              "value": "decline"
+            }
+          ],
+          "next": "FFf20e4187164c0397219f12bb8dd384e2",
+          "uuid": "ff0192b5-2688-48a2-827b-62207cf09a88"
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to decline",
+              "type": "equal_to",
+              "arguments": [
+                "{{widgets.Initial_Notification.inbound.Body}}"
+              ],
+              "value": "decline"
+            }
+          ],
+          "next": "FFf20e4187164c0397219f12bb8dd384e2",
+          "uuid": "3a38ec89-8038-430f-960b-2a121b868f87"
+        }
+      ],
+      "sid": "FF4ea9c696db08cde0548da853cc560545"
+    },
+    {
+      "type": "Message",
+      "name": "SMSAccepted",
+      "properties": {
+        "offset": {
+          "x": -270,
+          "y": 780
+        },
+        "body": "Great! We've let {{flow.data.CustomerName}} know that you've accepted their order.",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "media_url": null,
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "attributes": null
+      },
+      "transitions": [
+        {
+          "event": "sent",
+          "conditions": [],
+          "next": "FF8ef26d4c83e189342da9b15ab6bb2ccf",
+          "uuid": "d78f7e71-cdf6-422c-927b-cacb09d87f8e"
+        },
+        {
+          "event": "failed",
+          "conditions": [],
+          "next": "FF611a54e3bb307089c5c3d3226c185cf8",
+          "uuid": "8739a73a-b5f1-4646-9834-05cac2025577"
+        }
+      ],
+      "sid": "FF611a54e3bb307089c5c3d3226c185cf8"
+    },
+    {
+      "type": "Webhook",
+      "name": "POSTAccepted",
+      "properties": {
+        "offset": {
+          "x": 280,
+          "y": 1450
+        },
+        "method": "POST",
+        "url": "https://crm.webhook.io/orderstatus",
+        "body": null,
+        "timeout": null,
+        "parameters": null,
+        "save_response_as": null,
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8"
+      },
+      "transitions": [
+        {
+          "event": "success",
+          "conditions": [],
+          "next": "FF5a8611f69443cd9e8e6ce14a4824e87a",
+          "uuid": "0ada39a4-9165-424b-92ce-9ca72d17d060"
+        },
+        {
+          "event": "failed",
+          "conditions": [],
+          "next": "FF5a8611f69443cd9e8e6ce14a4824e87a",
+          "uuid": "ad0ecf71-9c37-43a4-9709-78fb09186006"
+        }
+      ],
+      "sid": "FF8ef26d4c83e189342da9b15ab6bb2ccf"
+    },
+    {
+      "type": "Gather",
+      "name": "VoiceConfirmation",
+      "properties": {
+        "offset": {
+          "x": 1210,
+          "y": 580
+        },
+        "timeout": 10,
+        "finish_on_key": "#",
+        "stop_gather": true,
+        "number_of_digits": 1,
+        "save_response_as": null,
+        "say": "This is COMPANY_NAME calling to confirm your order with {{flow.data.CustomerName}}. Their order was {{flow.data.OrderInfo}}, and their estimated wait time was {{flow.data.WaitTime}}. Please say accept or press 1 to accept the order. If you would like to decline the order, then say decline or press 2",
+        "play": null,
+        "voice": "Polly.Matthew",
+        "language": "en-US",
+        "loop": 1,
+        "hints": "accept, decline",
+        "gather_language": "en-US"
+      },
+      "transitions": [
+        {
+          "event": "keypress",
+          "conditions": [],
+          "next": "FFbd05f10f75f5136c4018a1882a665128",
+          "uuid": "33bae5c3-bdb2-4e6c-9c21-e639cb996770"
+        },
+        {
+          "event": "speech",
+          "conditions": [],
+          "next": "FF4ef639dd9a1e13ae705bd8a5e140eefc",
+          "uuid": "daeb4be9-7da9-4570-a4e8-664c0a62f642"
+        },
+        {
+          "event": "timeout",
+          "conditions": [],
+          "next": "FF2a657a1b642cef6452e3c67fe5a5f262",
+          "uuid": "a5fb5be2-21e7-4423-80d8-02681bb7d3ae"
+        }
+      ],
+      "sid": "FF51d3f8b2bdc5b9f3c4c765ebc1c62962"
+    },
+    {
+      "type": "Message",
+      "name": "SMSDeclined",
+      "properties": {
+        "offset": {
+          "x": 220,
+          "y": 780
+        },
+        "body": "Alright... We've let {{flow.data.CustomerName}} know that you declined their order.",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "media_url": null,
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "attributes": null
+      },
+      "transitions": [
+        {
+          "event": "sent",
+          "conditions": [],
+          "next": "FF31e5c3c8d5b14516ea25609c6d0e4b97",
+          "uuid": "510f1be2-8a9d-47d7-a752-1a9b82b2672a"
+        },
+        {
+          "event": "failed",
+          "conditions": [],
+          "next": "FFf20e4187164c0397219f12bb8dd384e2",
+          "uuid": "82761a70-1ba7-4e3b-8ce7-288258119432"
+        }
+      ],
+      "sid": "FFf20e4187164c0397219f12bb8dd384e2"
+    },
+    {
+      "type": "Webhook",
+      "name": "POSTDeclined",
+      "properties": {
+        "offset": {
+          "x": 930,
+          "y": 1440
+        },
+        "method": "POST",
+        "url": "https://crm.webhook.io/orderstatus",
+        "body": null,
+        "timeout": null,
+        "parameters": null,
+        "save_response_as": null,
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8"
+      },
+      "transitions": [
+        {
+          "event": "success",
+          "conditions": [],
+          "next": "FF8e8bce580eb59abfda431a778768323b",
+          "uuid": "306c1e54-77e9-4426-98eb-e2ea63795fe6"
+        },
+        {
+          "event": "failed",
+          "conditions": [],
+          "next": "FF8e8bce580eb59abfda431a778768323b",
+          "uuid": "f5b4297c-952c-4708-8219-862be4aad2cf"
+        }
+      ],
+      "sid": "FF31e5c3c8d5b14516ea25609c6d0e4b97"
+    },
+    {
+      "type": "Dial",
+      "name": "FollowUpCall",
+      "properties": {
+        "offset": {
+          "x": 1340,
+          "y": 310
+        },
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "record": false,
+        "timeout": 30
+      },
+      "transitions": [
+        {
+          "event": "answered",
+          "conditions": [],
+          "next": "FF51d3f8b2bdc5b9f3c4c765ebc1c62962",
+          "uuid": "0e8e2594-0ae0-4675-89c5-170b3653853f"
+        },
+        {
+          "event": "answeredByMachine",
+          "conditions": [],
+          "next": "FFd0789f099c0d0ce96ada4cb389231e75",
+          "uuid": "05c00818-2e02-43b8-b73d-dcaeed266b90"
+        },
+        {
+          "event": "busy",
+          "conditions": [],
+          "next": "FF6042eb8e2423cb35259219c0403abc8b",
+          "uuid": "524bca6c-1945-43f8-abab-6d08e6155977"
+        },
+        {
+          "event": "noAnswer",
+          "conditions": [],
+          "next": "FFd0789f099c0d0ce96ada4cb389231e75",
+          "uuid": "84b21b99-e5a8-45a1-adaf-7d288127de43"
+        },
+        {
+          "event": "failed",
+          "conditions": [],
+          "next": "FFd0789f099c0d0ce96ada4cb389231e75",
+          "uuid": "25f06ea6-adb4-4c08-b055-cbf0f9edd24b"
+        }
+      ],
+      "sid": "FF6042eb8e2423cb35259219c0403abc8b"
+    },
+    {
+      "type": "MessagePrompt",
+      "name": "SMSFailover",
+      "properties": {
+        "offset": {
+          "x": -1090,
+          "y": 440
+        },
+        "body": "It doesn't look like you replied with \"Accept\" or \"Decline\". Please reply with one of these 2 keywords.",
+        "from": "{{flow.channel.address}}",
+        "timeout": 120,
+        "save_response_as": null,
+        "media_url": null,
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "attributes": null
+      },
+      "transitions": [
+        {
+          "event": "incomingMessage",
+          "conditions": [],
+          "next": "FF4ea9c696db08cde0548da853cc560545",
+          "uuid": "2ba0ab0d-aea8-4899-9abd-077491c7ee3f"
+        },
+        {
+          "event": "timeout",
+          "conditions": [],
+          "next": "FF6042eb8e2423cb35259219c0403abc8b",
+          "uuid": "fcf91e44-73af-412a-8104-6cd3a3d4aca5"
+        },
+        {
+          "event": "deliveryFailure",
+          "conditions": [],
+          "next": "FFec580e3ef75c97d9e421e894d3d93567",
+          "uuid": "ac16516e-2695-4060-bde7-d60c0443037a"
+        }
+      ],
+      "sid": "FFec580e3ef75c97d9e421e894d3d93567"
+    },
+    {
+      "type": "Branch",
+      "name": "DTMFResponse",
+      "properties": {
+        "offset": {
+          "x": 950,
+          "y": 820
+        },
+        "input": "{{widgets.VoiceConfirmation.Digits}}"
+      },
+      "transitions": [
+        {
+          "event": "noMatch",
+          "conditions": [],
+          "next": "FF2a657a1b642cef6452e3c67fe5a5f262",
+          "uuid": "c90879ad-939c-4c35-ae71-7928c2850e01"
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to 1",
+              "type": "equal_to",
+              "arguments": [
+                "{{widgets.VoiceConfirmation.Digits}}"
+              ],
+              "value": "1"
+            }
+          ],
+          "next": "FFb8ff74a0c6eddf944806982ed126ff78",
+          "uuid": "3a751094-32ef-41b8-ab9f-c66cbfe3b6ab"
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to 2",
+              "type": "equal_to",
+              "arguments": [
+                "{{widgets.VoiceConfirmation.Digits}}"
+              ],
+              "value": "2"
+            }
+          ],
+          "next": "FF8aeb9b0a3328afea225bfcb60a573086",
+          "uuid": "e57995c8-9da7-4e39-b37d-b5a5de3584cd"
+        }
+      ],
+      "sid": "FFbd05f10f75f5136c4018a1882a665128"
+    },
+    {
+      "type": "SayPlay",
+      "name": "VoiceAccepted",
+      "properties": {
+        "offset": {
+          "x": 1240,
+          "y": 1140
+        },
+        "say": "Thank you for accepting {{flow.data.CustomerName}}s order! We will let them know",
+        "play": null,
+        "voice": "Polly.Matthew",
+        "language": "en-US",
+        "loop": 1
+      },
+      "transitions": [
+        {
+          "event": "audioComplete",
+          "conditions": [],
+          "next": "FF8ef26d4c83e189342da9b15ab6bb2ccf",
+          "uuid": "38e819d2-f523-4781-a395-7fbc5483eeeb"
+        }
+      ],
+      "sid": "FFb8ff74a0c6eddf944806982ed126ff78"
+    },
+    {
+      "type": "SayPlay",
+      "name": "VoiceDeclined",
+      "properties": {
+        "offset": {
+          "x": 1790,
+          "y": 1140
+        },
+        "say": "You've declined {{flow.data.CustomerName}}s order. We will let them know.",
+        "play": null,
+        "voice": "Polly.Matthew",
+        "language": "en-US",
+        "loop": 1
+      },
+      "transitions": [
+        {
+          "event": "audioComplete",
+          "conditions": [],
+          "next": "FF31e5c3c8d5b14516ea25609c6d0e4b97",
+          "uuid": "e313282a-1af7-462e-957c-61ec9689d935"
+        }
+      ],
+      "sid": "FF8aeb9b0a3328afea225bfcb60a573086"
+    },
+    {
+      "type": "Branch",
+      "name": "VoiceResponse",
+      "properties": {
+        "offset": {
+          "x": 1830,
+          "y": 810
+        },
+        "input": "{{widgets.VoiceConfirmation.SpeechResult}}"
+      },
+      "transitions": [
+        {
+          "event": "noMatch",
+          "conditions": [],
+          "next": "FF2a657a1b642cef6452e3c67fe5a5f262",
+          "uuid": "b0fcc311-b5e6-4770-b565-ce4969d1f09c"
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value contains accept",
+              "type": "contains",
+              "arguments": [
+                "{{widgets.VoiceConfirmation.SpeechResult}}"
+              ],
+              "value": "accept"
+            }
+          ],
+          "next": "FFb8ff74a0c6eddf944806982ed126ff78",
+          "uuid": "c33b1fda-7dec-403f-8e60-102dc323082f"
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value contains decline",
+              "type": "contains",
+              "arguments": [
+                "{{widgets.VoiceConfirmation.SpeechResult}}"
+              ],
+              "value": "decline"
+            }
+          ],
+          "next": "FF8aeb9b0a3328afea225bfcb60a573086",
+          "uuid": "849b7bc1-2f73-46ca-ad6d-42c289d43f5a"
+        }
+      ],
+      "sid": "FF4ef639dd9a1e13ae705bd8a5e140eefc"
+    },
+    {
+      "type": "Message",
+      "name": "SendAcceptToEndUser",
+      "properties": {
+        "offset": {
+          "x": 290,
+          "y": 1790
+        },
+        "body": "Hi there {{flow.data.CustomerName}}! Looks like {{flow.data.RestaurantName}} accepted your order",
+        "from": "{{flow.channel.address}}",
+        "to": "{{flow.data.EndUserPhoneNumber}}",
+        "media_url": null,
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "attributes": null
+      },
+      "transitions": [
+        {
+          "event": "sent",
+          "conditions": [],
+          "next": null,
+          "uuid": "8661e7cf-ec50-46e6-a389-1c9d074e04fa"
+        },
+        {
+          "event": "failed",
+          "conditions": [],
+          "next": "FF5a8611f69443cd9e8e6ce14a4824e87a",
+          "uuid": "e26805d4-d3bb-4fe1-87cc-5f5a780deb5b"
+        }
+      ],
+      "sid": "FF5a8611f69443cd9e8e6ce14a4824e87a"
+    },
+    {
+      "type": "Message",
+      "name": "SendDeclineToEndUser",
+      "properties": {
+        "offset": {
+          "x": 940,
+          "y": 1780
+        },
+        "body": "Hi there {{flow.data.CustomerName}}! Looks like {{flow.data.RestaurantName}} declined your order. Look at your app for more info.",
+        "from": "{{flow.channel.address}}",
+        "to": "{{flow.data.EndUserPhoneNumber}}",
+        "media_url": null,
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "attributes": null
+      },
+      "transitions": [
+        {
+          "event": "sent",
+          "conditions": [],
+          "next": null,
+          "uuid": "351f0e73-4886-4d00-a86b-d5a5ff5cd5d2"
+        },
+        {
+          "event": "failed",
+          "conditions": [],
+          "next": "FF8e8bce580eb59abfda431a778768323b",
+          "uuid": "59ae8b20-63d9-4b94-84dc-873c55cb27d0"
+        }
+      ],
+      "sid": "FF8e8bce580eb59abfda431a778768323b"
+    },
+    {
+      "type": "Gather",
+      "name": "voiceFailover",
+      "properties": {
+        "offset": {
+          "x": 1440,
+          "y": 820
+        },
+        "timeout": 10,
+        "finish_on_key": "#",
+        "stop_gather": true,
+        "number_of_digits": 1,
+        "save_response_as": null,
+        "say": "Sorry I didn't get that. You can press 1 to accept or say accept. Saying decline or pressing 2 will decline.",
+        "play": null,
+        "voice": "Polly.Matthew",
+        "language": "en-US",
+        "loop": 1,
+        "hints": "accept, decline",
+        "gather_language": "en-US"
+      },
+      "transitions": [
+        {
+          "event": "keypress",
+          "conditions": [],
+          "next": "FFbd05f10f75f5136c4018a1882a665128",
+          "uuid": "7f36d8cb-448a-4e2b-9f0b-5e2e262bb5fa"
+        },
+        {
+          "event": "speech",
+          "conditions": [],
+          "next": "FF4ef639dd9a1e13ae705bd8a5e140eefc",
+          "uuid": "618a29e1-3f04-4f83-a58e-fd08181dae1a"
+        },
+        {
+          "event": "timeout",
+          "conditions": [],
+          "next": "FF2a657a1b642cef6452e3c67fe5a5f262",
+          "uuid": "e4448e7f-545e-4c33-aa57-748b56830a96"
+        }
+      ],
+      "sid": "FF2a657a1b642cef6452e3c67fe5a5f262"
+    },
+    {
+      "type": "Webhook",
+      "name": "POSTFailedToAnswer",
+      "properties": {
+        "offset": {
+          "x": 1670,
+          "y": 560
+        },
+        "method": "POST",
+        "url": "https://crm.webhook.io/orderstatus",
+        "body": null,
+        "timeout": null,
+        "parameters": null,
+        "save_response_as": null,
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8"
+      },
+      "transitions": [
+        {
+          "event": "success",
+          "conditions": [],
+          "next": null,
+          "uuid": "82d27d7a-43f5-4d37-af65-33ffde70f387"
+        },
+        {
+          "event": "failed",
+          "conditions": [],
+          "next": null,
+          "uuid": "bb5b715e-8726-4e53-9b57-de3cb82d0dd3"
+        }
+      ],
+      "sid": "FFd0789f099c0d0ce96ada4cb389231e75"
+    }
+  ]
+}
